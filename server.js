@@ -327,7 +327,7 @@ app.post('/post/:message/:group', authenticate, function (req, res, next) {
 app.post('/groupPayout/:group/:members/:amount', authenticate, function (req, res, next) {
   var requiredFields = {
     'group': 'int',
-    'members': 'array',
+    'members': 'int',
     'amount': 'int'
   };
   var validate = [req.params, req.body];

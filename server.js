@@ -369,22 +369,19 @@ app.post('/shout/:group', authenticate, function (req, res, next) {
 app.post('/exile/:group/:target', authenticate, function (req, res, next) {
   var requiredFields = {
     'group': 'int',
-    'target': 'int'
-  };
-  var optionalFields = {
-    'deleteAllPosts': 'boolean'
+    'target': 'int',
   };
   var validate = [req.params, req.body];
-  var opt = verifyParameters(res, validate, requiredFields, optionalFields);
+  var opt = verifyParameters(res, validate, requiredFields);
   if (!opt) {
     return;
   }
   rbx.exile(opt)
   .then(function () {
-    res.json({error: null, message: 'User' + opt.target + 'Exiled from group ' + opt.group});
+    res.json({error: null, message: 'User ' + opt.target + ' exiled from group "' + opt.group + '"'});
   })
   .catch(function (err) {
-    sendErr(res, {error: 'Error: ' + err.message});
+    sendErr(res, {error: 'Message failed: ' + err.message});
   });
 });
 

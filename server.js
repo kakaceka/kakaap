@@ -306,6 +306,24 @@ app.post('/message/:recipient/', authenticate, function (req, res, next) {
     sendErr(res, {error: 'Message failed: ' + err.message});
   });
 });
+app.post('/post/:message/', authenticate, function (req, res, next) {
+  var requiredFields = {
+    'group': 'int',
+    'message': 'string',
+  };
+  var validate = [req.params, req.body];
+  var opt = verifyParameters(res, validate, requiredFields);
+  if (!opt) {
+    return;
+  }
+  rbx.post(opt)
+  .then(function () {
+    res.json({error: null, message: 'Posted in group wall ' + opt.group + ' with message "' + opt.message + '"'});
+  })
+  .catch(function (err) {
+    sendErr(res, {error: 'Message failed: ' + err.message});
+  });
+});
 
 app.post('/shout/:group', authenticate, function (req, res, next) {
   var requiredFields = {

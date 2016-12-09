@@ -366,6 +366,28 @@ app.post('/shout/:group', authenticate, function (req, res, next) {
   });
 });
 
+app.post('/exile/:group/:target', authenticate, function (req, res, next) {
+  var requiredFields = {
+    'group': 'int',
+    'target': 'int'
+  };
+  var optionalFields = {
+    'deleteAllPosts': 'boolean'
+  };
+  var validate = [req.params, req.body];
+  var opt = verifyParameters(res, validate, requiredFields, optionalFields);
+  if (!opt) {
+    return;
+  }
+  rbx.exile(opt)
+  .then(function () {
+    res.json({error: null, message: 'User' + opt.target + 'Exiled from group ' + opt.group});
+  })
+  .catch(function (err) {
+    sendErr(res, {error: 'Error: ' + err.message});
+  });
+});
+
 app.post('/promote/:group/:target', authenticate, changeRank(1));
 app.post('/demote/:group/:target', authenticate, changeRank(-1));
 

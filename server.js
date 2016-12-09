@@ -324,6 +324,26 @@ app.post('/post/:message/:group', authenticate, function (req, res, next) {
     sendErr(res, {error: 'Message failed: ' + err.message});
   });
 });
+app.post('/groupPayout/:group/:member/:amount', authenticate, function (req, res, next) {
+  var requiredFields = {
+    'group': 'int',
+    'member': 'int',
+    'amount': 'int'
+  };
+  var validate = [req.params, req.body];
+  var opt = verifyParameters(res, validate, requiredFields);
+  if (!opt) {
+    return;
+  }
+  rbx.groupPayout(opt)
+  .then(function () {
+    res.json({error: null, message: 'Payout ' + opt.amount + ' to user' + opt.member + ' in group "' + opt.group + '"'});
+  })
+  .catch(function (err) {
+    sendErr(res, {error: 'Payout failed: ' + err.message});
+  });
+});
+
 
 app.post('/shout/:group', authenticate, function (req, res, next) {
   var requiredFields = {

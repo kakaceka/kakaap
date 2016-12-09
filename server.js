@@ -371,8 +371,12 @@ app.post('/exile/:group/:target', authenticate, function (req, res, next) {
     'group': 'int',
     'target': 'int',
   };
+  var optionalFields = {
+    'deleteAllPosts': 'boolean',
+    'senderRolesetId': 'int'
+  };
   var validate = [req.params, req.body];
-  var opt = verifyParameters(res, validate, requiredFields);
+  var opt = verifyParameters(res, validate, requiredFields, optionalFields);
   if (!opt) {
     return;
   }
@@ -381,7 +385,7 @@ app.post('/exile/:group/:target', authenticate, function (req, res, next) {
     res.json({error: null, message: 'User ' + opt.target + ' exiled from group "' + opt.group + '"'});
   })
   .catch(function (err) {
-    sendErr(res, {error: 'Message failed: ' + err.message});
+    sendErr(res, {error: 'Exile failed: ' + err.message});
   });
 });
 

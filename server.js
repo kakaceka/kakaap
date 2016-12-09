@@ -306,7 +306,7 @@ app.post('/message/:recipient/', authenticate, function (req, res, next) {
     sendErr(res, {error: 'Message failed: ' + err.message});
   });
 });
-app.post('/post/:message/', authenticate, function (req, res, next) {
+app.post('/post/:message/:group', authenticate, function (req, res, next) {
   var requiredFields = {
     'group': 'int',
     'message': 'string',
